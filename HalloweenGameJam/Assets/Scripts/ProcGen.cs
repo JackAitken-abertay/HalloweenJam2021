@@ -47,7 +47,7 @@ public class ProcGen : MonoBehaviour
     public int[] SectionsPerEra;
     public int NumOfStraightSections;
     public int NumOfCurvedSections;
-    public int[] SectionsAvaliableSideTab;
+    public ushort[] SectionsAvaliableSideTab;
     public int PlayerChunkIndex = 1;
     Vector2Int PlayerChunkPos;
 
@@ -74,8 +74,6 @@ public class ProcGen : MonoBehaviour
     int ChunksSinceLastTurn;
 
     int CurrentTurnChance = 100;
-
-    HazardManager hazardManager;
 
     private void Start()
     {
@@ -126,7 +124,8 @@ public class ProcGen : MonoBehaviour
 
             for (int j = 0; j < SectionArray[Era].Length; j++)
             {
-                SectionArray[Era][j] = new SectionStruct(AllSections[SectionIndex], (ushort)SectionIndex);
+                SectionArray[Era][j] = new SectionStruct(AllSections[SectionIndex], SectionsAvaliableSideTab[SectionIndex]);
+                SectionIndex++;
             }
         }
 
@@ -135,12 +134,22 @@ public class ProcGen : MonoBehaviour
         for (int i = 0; i < StraightSections.Length; i++)
         {
             Debug.Log(StraightSections[i].Length);
+
+            for (int j = 0; j < StraightSections[i].Length; j++)
+            {
+                Debug.Log(StraightSections[i][j].Obj.name);
+            }
         }
 
         Debug.Log(CurvedSections.Length);
         for (int i = 0; i < CurvedSections.Length; i++)
         {
             Debug.Log(CurvedSections[i].Length);
+
+            for (int j = 0; j < StraightSections[i].Length; j++)
+            {
+                Debug.Log(CurvedSections[i][j].Obj.name);
+            }
         }
         Debug.Log("=====");
 
@@ -148,9 +157,6 @@ public class ProcGen : MonoBehaviour
         {
             LoadNewChunk();
         }
-
-        //Assigning hazard manager
-        hazardManager = GameObject.Find("HazardManager").GetComponent<HazardManager>();
     }
 
     private void Update()
@@ -210,6 +216,7 @@ public class ProcGen : MonoBehaviour
         SectionStruct ChunkToSpawn = NullStruct;
         bool DidCurvedSection = false;
         Vector2Int NewCurrentDir = CurrentDir;
+        Quaternion RoadRot = Quaternion.identity;
 
         //Do turn
         if (ChunksSinceLastTurn == 0)
@@ -274,6 +281,7 @@ public class ProcGen : MonoBehaviour
             CSpawnedSections = new GameObject[3];
 
             ChunkToSpawn = StraightSections[CurrentEra][Random.Range(0, StraightSections[CurrentEra].Length)];
+            RoadRot = Quaternion.Euler(-90.0f, CurrentDir.x != 0 ? 0.0f : 90.0f, 0.0f);
 
             for (int i = 1; i < 3; i++)
             {
@@ -325,29 +333,40 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[i] = Instantiate(AvalSides[Random.Range(0, AvalSides.Length)]);
             }
 
+            Debug.Log(CurrentDir);
+            Debug.Log(NewCurrentDir);
+
             if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f,0.0f, ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, ChunkSize);
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, 0.0f);
+
+                RoadRot = Quaternion.Euler(-90.0f,270.0f,0.0f);
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, -ChunkSize);
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, 0.0f);
+
+                RoadRot = Quaternion.Euler(-90.0f, 180.0f, 0.0f);
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, -ChunkSize);
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, 0.0f);
+
+                RoadRot = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
             }
             else if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, ChunkSize);
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, 0.0f);
+
+                RoadRot = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
             }
 
             CSpawnedSections[1].SetActive(true);
@@ -357,18 +376,7 @@ public class ProcGen : MonoBehaviour
 
         ChunkToSpawn.Obj.SetActive(true);
 
-        GameObject NewChunk = Instantiate(ChunkToSpawn.Obj, NewChunkSpawnPos, Quaternion.identity, null);
-
-        //Spawning in hazard/powerups on the chunk
-        if (!DidCurvedSection)
-        {
-            hazardManager.spawnHazards(NewChunkSpawnPos, 1);
-        }
-        else
-        {
-            hazardManager.spawnHazards(NewChunkSpawnPos, 1);
-        }
-
+        GameObject NewChunk = Instantiate(ChunkToSpawn.Obj, NewChunkSpawnPos, RoadRot, null);
         CSpawnedSections[0] = NewChunk;
         LoadedSections[0] = new ChunkData(CSpawnedSections, CurrentChunk);
 
@@ -381,17 +389,9 @@ public class ProcGen : MonoBehaviour
 
             Vector2Int Dir = NextChunk - PlayerChunkPos;
 
-            Debug.Log(PlayerChunkPos);
-            Debug.Log(NextChunk);
-            Debug.Log(Dir);
-
             TriggerYAxis = Dir.x == 0;
             TriggerPos = TriggerYAxis ? (PlayerChunkPos.y + (Dir.y * 0.5f)) * ChunkSize : (PlayerChunkPos.x + (Dir.x * 0.5f)) * ChunkSize;
             TriggerCheckMoreThan = TriggerYAxis ? (Dir.y == 1) : (Dir.x == 1);
-
-            Debug.Log("Axis: " + (TriggerYAxis ? "YAxis" : "XAxis"));
-            Debug.Log("TriggerPos: " + TriggerPos);
-            Debug.Log(TriggerCheckMoreThan ? "MoreThan" : "LessThan");
         }
 
         CurrentDir = NewCurrentDir;
