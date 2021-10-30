@@ -20,11 +20,16 @@ public class HazardManager : MonoBehaviour
     //Instance of the class needed for altering the time period
     TimePeriod timePeriod;
 
+    private void Awake()
+    {
+        timePeriod = GameObject.FindObjectOfType<TimePeriod>().GetComponent<TimePeriod>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         //Will need access to a time period manager - do that here
-        timePeriod = GameObject.Find("TimePeriodManager").GetComponent<TimePeriod>();
+        //timePeriod = GameObject.FindObjectOfType<TimePeriod>().GetComponent<TimePeriod>();
 
         //May also need access to the proc gen class Michael has - also do that here
     }
@@ -33,13 +38,13 @@ public class HazardManager : MonoBehaviour
     void Update()
     {
         //Set as a timer for now but will update to be called whenever I need it
-        spawnTimer += Time.deltaTime;
+       //spawnTimer += Time.deltaTime;
 
-        if(spawnTimer >= 5.0f)
-        {
-            spawnHazards(new Vector3(0, 0, 0), 3);
-            spawnTimer = 0.0f;
-        }
+        //if(spawnTimer >= 5.0f)
+        //{
+        //    spawnHazards(new Vector3(0, 0, 0), 3);
+        //    spawnTimer = 0.0f;
+        //}
 
         if(Input.GetKeyDown(KeyCode.A))
         {

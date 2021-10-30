@@ -75,6 +75,15 @@ public class ProcGen : MonoBehaviour
 
     int CurrentTurnChance = 100;
 
+    HazardManager hazardManager;
+    PowerupManager powerupManager;
+
+    private void Awake()
+    {
+        hazardManager = GameObject.FindObjectOfType<HazardManager>().GetComponent<HazardManager>();
+        powerupManager = GameObject.Find("PowerupManager").GetComponent<PowerupManager>();
+    }
+
     private void Start()
     {
         ChunksSinceLastTurn = AmountOfChunksToLoad;
@@ -395,5 +404,8 @@ public class ProcGen : MonoBehaviour
         }
 
         CurrentDir = NewCurrentDir;
+
+        hazardManager.spawnHazards(NewChunkSpawnPos, 1);
+        //powerupManager.spawnPowerups(NewChunkSpawnPos, 2);
     }   
 }

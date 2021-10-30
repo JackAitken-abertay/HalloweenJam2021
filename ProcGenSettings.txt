@@ -8,7 +8,7 @@ SectionsPerEra: ArraySize 6: All 1
 NumOfStraightSections: 3
 NumOfCurvedSections: 3
 SectionsAvaliableSideTab: ArraySize 6: All 0
-PlayerChunkIndex 0
+PlayerChunkIndex 12
 PlayerTransform: The Player Object/transform
 ChunkSize: 10
 Number Of Chunks To Load: 15
