@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
     public float verticalSpeed = 0.0f;
 
     //Will delete if game manager is made
-    //TimePeriod timePeriod;
-    //ScreenFade screenFade;
+    TimePeriod timePeriod;
+    ScreenFade screenFade;
 
     public int score;
 
@@ -84,6 +84,9 @@ public class PlayerController : MonoBehaviour
             hasLetter2 = false;
             hasLetter3 = false;
         }
+
+        timePeriod = GameObject.Find("TimePeriodManager").GetComponent<TimePeriod>();
+        screenFade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,8 +95,18 @@ public class PlayerController : MonoBehaviour
         {
             case "Speed": moveSpeed = 25.0f; hasSpeed = true; speedTimer = 5.0f; break;
             case "Shield": hasShield = true; break;
-            case "Time": //Call game manager class to adjust time period
-                         break;
+            case "Time": 
+                if(timePeriod.GetTimePeriod() == Period.FUTURE)
+                {
+                    timePeriod.SetTimePeriod(Period.PRESENT);
+                }
+                else if (timePeriod.GetTimePeriod() == Period.PRESENT)
+                {
+                    timePeriod.SetTimePeriod(Period.PAST);
+                }
+                screenFade.FadeToWhite();
+                screenFade.FadeIn();
+                break;
             case "monster": //Change the scene to the game over
                 break;
             case "letter1":  hasLetter1 = true;
