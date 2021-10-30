@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     public float boostSpeed = 15.0f;
     public float currentSpeed;
     public float speedUpDistance = 75.0f;
+
+    private float soundTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,13 @@ public class Enemy : MonoBehaviour
         if (distanceToPlayer < speedUpDistance)
         {
             currentSpeed = defaultSpeed;
+        }
+
+        soundTimer += Time.deltaTime;
+
+        if(soundTimer > 10.0f)
+        {
+            GetComponent<AudioSource>().Play();
         }
     }
 }
