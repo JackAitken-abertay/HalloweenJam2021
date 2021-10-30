@@ -49,4 +49,16 @@ public class Enemy : MonoBehaviour
             GetComponent<AudioSource>().Play();
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Collectable")
+        {
+            Destroy(collision.gameObject);
+        }
+        else if (collision.gameObject.tag == "Obstacle")
+        {
+            Destroy(collision.gameObject);
+        }
+    }
 }
