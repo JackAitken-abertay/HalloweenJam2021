@@ -38,7 +38,7 @@ public class ProcGen : MonoBehaviour
         },
     };
 
-    GameObject[] LoadedSections;
+    ChunkData[] LoadedSections;
 
     static readonly SectionStruct NullStruct = new SectionStruct(null,0);
 
@@ -48,18 +48,23 @@ public class ProcGen : MonoBehaviour
     public int NumOfStraightSections;
     public int NumOfCurvedSections;
     public int[] SectionsAvaliableSideTab;
+    public int PlayerChunkIndex = 1;
+    Vector2Int PlayerChunkPos;
 
     int StraightSectionsPerEra;
 
     public bool TestChunks = false;
     public float TestChunkTimer = 0.0f;
-    
+    public GameObject TestPlayer;
+    public Transform PlayerTransform;
+
     public float ChunkSize = 5.0f;
 
     public byte CurrentEra = 0;
 
-    Vector2 TriggerCheckPos;
-    bool[] CheckPosMoreThan;
+    float TriggerPos;
+    bool TriggerYAxis;
+    bool TriggerCheckMoreThan;
 
     Vector2Int CurrentChunk = new Vector2Int(0, 0);
     Vector2Int CurrentDir = new Vector2Int(0, -1);
@@ -78,6 +83,17 @@ public class ProcGen : MonoBehaviour
 
         SideSections = new GameObject[ObjectsPerSideCluster.Length][];
 
+        if (TestPlayer != null)
+        {
+            PlayerTransform = TestPlayer.transform;
+        }
+
+        float PlayerStartPos = CurrentDir.y * PlayerChunkIndex;
+
+        PlayerChunkIndex = AmountOfChunksToLoad - PlayerChunkIndex - 1;
+
+        PlayerTransform.position = new Vector3(0.0f, 1.0f, PlayerStartPos * ChunkSize);
+
         int SideSectionIndex = 0;
 
         for (int i = 0; i < ObjectsPerSideCluster.Length; i++)
@@ -92,7 +108,7 @@ public class ProcGen : MonoBehaviour
             }
         }
 
-        LoadedSections = new GameObject[AmountOfChunksToLoad];
+        LoadedSections = new ChunkData[AmountOfChunksToLoad];
 
         int SectionIndex = 0;
 
@@ -146,6 +162,41 @@ public class ProcGen : MonoBehaviour
                 TestChunkTimer -= Time.deltaTime;
             }
         }
+
+        if (TriggerYAxis)
+        {
+            if (TriggerCheckMoreThan)
+            {
+                if (PlayerTransform.position.z > TriggerPos)
+                {
+                    LoadNewChunk();
+                }
+            }
+            else
+            {
+                if (PlayerTransform.position.z < TriggerPos)
+                {
+                    LoadNewChunk();
+                }
+            }
+        }
+        else
+        {
+            if (TriggerCheckMoreThan)
+            {
+                if (PlayerTransform.position.x > TriggerPos)
+                {
+                    LoadNewChunk();
+                }
+            }
+            else
+            {
+                if (PlayerTransform.position.x < TriggerPos)
+                {
+                    LoadNewChunk();
+                }
+            }
+        }
     }
 
     void LoadNewChunk()
@@ -196,7 +247,12 @@ public class ProcGen : MonoBehaviour
 
         if (LoadedSections[AmountOfChunksToLoad - 1] != null)
         {
-            Destroy(LoadedSections[AmountOfChunksToLoad - 1]);
+            GameObject[] DestroyCluster = LoadedSections[AmountOfChunksToLoad - 1].SectionsInChunk;
+
+            for (int i = 0; i < DestroyCluster.Length; i++)
+            {
+                Destroy(DestroyCluster[i]);
+            }
         }
 
         for (int i = AmountOfChunksToLoad - 1; i > 0; i--)
@@ -231,9 +287,10 @@ public class ProcGen : MonoBehaviour
                 }
             }
 
-            if (DontMake)
+            if (!DontMake)
             {
                 CSpawnedSections[1].transform.position = new Vector3(NewChunkSpawnPos.x + SavedSideVecs[0].x * ChunkSize, 0.0f, NewChunkSpawnPos.z + SavedSideVecs[0].y * ChunkSize);
+                CSpawnedSections[1].SetActive(true);
             }
 
             DontMake = false;
@@ -247,13 +304,11 @@ public class ProcGen : MonoBehaviour
                 }
             }
 
-            if (DontMake)
+            if (!DontMake)
             {
                 CSpawnedSections[2].transform.position = new Vector3(NewChunkSpawnPos.x + SavedSideVecs[1].x * ChunkSize, 0.0f, NewChunkSpawnPos.z + SavedSideVecs[1].y * ChunkSize);
+                CSpawnedSections[2].SetActive(true);
             }
-
-            CSpawnedSections[1].SetActive(true);
-            CSpawnedSections[2].SetActive(true);
         }
         else
         {
@@ -298,12 +353,31 @@ public class ProcGen : MonoBehaviour
         ChunkToSpawn.Obj.SetActive(true);
 
         GameObject NewChunk = Instantiate(ChunkToSpawn.Obj, NewChunkSpawnPos, Quaternion.identity, null);
-        LoadedSections[0] = NewChunk;
+        CSpawnedSections[0] = NewChunk;
+        LoadedSections[0] = new ChunkData(CSpawnedSections, CurrentChunk);
 
         ChunkToSpawn.Obj.SetActive(false);
 
+        if (LoadedSections[PlayerChunkIndex] != null)
+        {
+            PlayerChunkPos = LoadedSections[PlayerChunkIndex].ChunkPos;
+            Vector2Int NextChunk = LoadedSections[PlayerChunkIndex - 1].ChunkPos;
+
+            Vector2Int Dir = NextChunk - PlayerChunkPos;
+
+            Debug.Log(PlayerChunkPos);
+            Debug.Log(NextChunk);
+            Debug.Log(Dir);
+
+            TriggerYAxis = Dir.x == 0;
+            TriggerPos = TriggerYAxis ? (PlayerChunkPos.y + (Dir.y * 0.5f)) * ChunkSize : (PlayerChunkPos.x + (Dir.x * 0.5f)) * ChunkSize;
+            TriggerCheckMoreThan = TriggerYAxis ? (Dir.y == 1) : (Dir.x == 1);
+
+            Debug.Log("Axis: " + (TriggerYAxis ? "YAxis" : "XAxis"));
+            Debug.Log("TriggerPos: " + TriggerPos);
+            Debug.Log(TriggerCheckMoreThan ? "MoreThan" : "LessThan");
+        }
+
         CurrentDir = NewCurrentDir;
-    }
-
-
+    }   
 }
