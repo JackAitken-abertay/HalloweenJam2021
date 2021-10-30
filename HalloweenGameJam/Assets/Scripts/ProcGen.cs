@@ -311,7 +311,7 @@ public class ProcGen : MonoBehaviour
 
             if (!DontMake)
             {
-                CSpawnedSections[1].transform.position = new Vector3(NewChunkSpawnPos.x + SavedSideVecs[0].x * ChunkSize, 0.0f, NewChunkSpawnPos.z + SavedSideVecs[0].y * ChunkSize);
+                CSpawnedSections[1].transform.position = new Vector3(NewChunkSpawnPos.x + SavedSideVecs[0].x * ChunkSize * 1.5f, 0.0f, NewChunkSpawnPos.z + SavedSideVecs[0].y * ChunkSize * 1.5f);
                 CSpawnedSections[1].SetActive(true);
             }
 
@@ -328,7 +328,7 @@ public class ProcGen : MonoBehaviour
 
             if (!DontMake)
             {
-                CSpawnedSections[2].transform.position = new Vector3(NewChunkSpawnPos.x + SavedSideVecs[1].x * ChunkSize, 0.0f, NewChunkSpawnPos.z + SavedSideVecs[1].y * ChunkSize);
+                CSpawnedSections[2].transform.position = new Vector3(NewChunkSpawnPos.x + SavedSideVecs[1].x * ChunkSize * 1.5f, 0.0f, NewChunkSpawnPos.z + SavedSideVecs[1].y * ChunkSize * 1.5f);
                 CSpawnedSections[2].SetActive(true);
             }
         }
@@ -347,33 +347,33 @@ public class ProcGen : MonoBehaviour
 
             if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
-                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f,0.0f, ChunkSize);
+                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f,0.0f, ChunkSize * 1.5f);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, ChunkSize);
-                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, 0.0f);
+                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f,270.0f,0.0f);
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
-                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize);
+                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize * 1.5f);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, -ChunkSize);
-                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, 0.0f);
+                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 180.0f, 0.0f);
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
-                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize);
+                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize * 1.5f);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, -ChunkSize);
-                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, 0.0f);
+                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
             }
             else if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
-                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, ChunkSize);
+                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, ChunkSize * 1.5f);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, ChunkSize);
-                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, 0.0f);
+                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
             }
