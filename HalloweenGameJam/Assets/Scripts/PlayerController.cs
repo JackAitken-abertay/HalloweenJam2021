@@ -59,7 +59,10 @@ public class PlayerController : MonoBehaviour
         inputVector.y = 0.0f;
         inputVector.z = Input.GetAxis("Vertical");
 
-        Vector3 playerMovement = inputVector * moveSpeed;
+        Vector3 right = new Vector3(transform.right.x, 0.0f, transform.right.z).normalized;
+        Vector3 forward = new Vector3(transform.forward.x, 0.0f, transform.forward.z).normalized;
+
+        Vector3 playerMovement = ((inputVector.x * right) + (inputVector.z * forward)) * moveSpeed;
 
         if (controller.isGrounded)
         {
@@ -132,7 +135,26 @@ public class PlayerController : MonoBehaviour
             case "letter2": hasLetter2 = true; break;
             case "letter3": hasLetter3 = true; break;
             case "Candy": score += 10; break;
-            case "Hazard": takeDamage(); break;
+            case "Hazard":
+                Hazard h = other.GetComponent<Hazard>();
+
+                if (h.type == HazardType.SLOW)
+                {
+                    takeDamage();
+                }
+                break;
+                
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        GameObject collider = hit.gameObject;
+
+        if (collider.tag == "Curved")
+        {
+            Debug.Log("Collided with curved road");
+            transform.Rotate(0.0f, 90.0f, 0.0f);
         }
     }
 
@@ -141,16 +163,23 @@ public class PlayerController : MonoBehaviour
         //Get the object we are colliding with
         GameObject collider = collision.gameObject;
         
-        if(transform.position.y > collider.transform.position.y)
-        {
-            //Set the players transform to follow whatever you are colliding with, except on the y-axis
-            transform.position = new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z);
-        }
-        else
-        {
-            //Take damage/slow down
-            takeDamage();
-        }
+        //if(transform.position.y > collider.transform.position.y)
+        //{
+        //    //Set the players transform to follow whatever you are colliding with, except on the y-axis
+        //    transform.position = new Vector3(collider.transform.position.x, transform.position.y, collider.transform.position.z);
+        //}
+        //else
+        //{
+        //    //Take damage/slow down
+        //    takeDamage();
+        //}
+
+       if (collider.tag == "onster")
+       {
+            Debug.Log("Collided with curved road");
+            transform.Rotate(0.0f, 90.0f, 0.0f);
+       }
+
     }
 
     //basic function for calculating what happens when colliding with a hazard
