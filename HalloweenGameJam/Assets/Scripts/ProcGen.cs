@@ -75,6 +75,8 @@ public class ProcGen : MonoBehaviour
 
     int CurrentTurnChance = 100;
 
+    HazardManager hazardManager;
+
     private void Start()
     {
         ChunksSinceLastTurn = AmountOfChunksToLoad;
@@ -146,6 +148,9 @@ public class ProcGen : MonoBehaviour
         {
             LoadNewChunk();
         }
+
+        //Assigning hazard manager
+        hazardManager = GameObject.Find("HazardManager").GetComponent<HazardManager>();
     }
 
     private void Update()
@@ -353,6 +358,17 @@ public class ProcGen : MonoBehaviour
         ChunkToSpawn.Obj.SetActive(true);
 
         GameObject NewChunk = Instantiate(ChunkToSpawn.Obj, NewChunkSpawnPos, Quaternion.identity, null);
+
+        //Spawning in hazard/powerups on the chunk
+        if (!DidCurvedSection)
+        {
+            hazardManager.spawnHazards(NewChunkSpawnPos, 1);
+        }
+        else
+        {
+            hazardManager.spawnHazards(NewChunkSpawnPos, 1);
+        }
+
         CSpawnedSections[0] = NewChunk;
         LoadedSections[0] = new ChunkData(CSpawnedSections, CurrentChunk);
 

@@ -10,11 +10,35 @@ public class PlayerController : MonoBehaviour
     public float gravity = 9.8f + (9.8f/2.0f);
     public float verticalSpeed = 0.0f;
 
+    //Will delete if game manager is made
+    //TimePeriod timePeriod;
+    //ScreenFade screenFade;
+
+    public int score;
+
+    //Variables to control powerups
+    public float speedTimer;
+    public bool hasSpeed;
+    public bool hasShield;
+    public bool hasLetter1;
+    public bool hasLetter2;
+    public bool hasLetter3;
+
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Please Work");
         controller = GetComponent<CharacterController>();
+
+        //Initialising variables to do with powerups
+        speedTimer = 0.0f;
+        hasSpeed = false;
+        hasShield = false;
+        hasLetter1 = false;
+        hasLetter2 = false;
+        hasLetter3 = false;
+
+        score = 0;
     }
 
     // Update is called once per frame
@@ -46,5 +70,37 @@ public class PlayerController : MonoBehaviour
         //Apply movemnet to controller
         controller.Move(playerMovement * Time.deltaTime);
 
+        //Start a timer for their speed if the player has it
+        if(hasSpeed && speedTimer > 0.0f)
+        {
+            speedTimer -= Time.deltaTime;
+        }
+
+        //If the player has all the letter powerups then add a lot to their score
+        if(hasLetter1 && hasLetter2 && hasLetter3)
+        {
+            score += 2000;
+            hasLetter1 = false;
+            hasLetter2 = false;
+            hasLetter3 = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Speed": moveSpeed = 25.0f; hasSpeed = true; speedTimer = 5.0f; break;
+            case "Shield": hasShield = true; break;
+            case "Time": //Call game manager class to adjust time period
+                         break;
+            case "monster": //Change the scene to the game over
+                break;
+            case "letter1":  hasLetter1 = true;
+                break;
+            case "letter2": hasLetter2 = true; break;
+            case "letter3": hasLetter3 = true; break;
+            case "Candy": score += 10; break;
+        }
     }
 }

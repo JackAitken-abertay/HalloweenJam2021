@@ -58,13 +58,15 @@ public class HazardManager : MonoBehaviour
     //Function for spawning the hazards
     public void spawnHazards(Vector3 objectPosition, int howManyTimes)
     {
-        //Position will be object position in the final product
+        Vector3 spawnPosition;
+        
+        //Assigning values for a max and min spawn area
         spawnMax = objectPosition.x + 5.0f;
         spawnMin = objectPosition.x - 5.0f;
 
         for (int i = 0; i < howManyTimes; i++)
         {
-            Vector3 spawnPosition = new Vector3(Random.Range(spawnMin, spawnMax), objectPosition.y, Random.Range(spawnMin, spawnMax));
+            spawnPosition = new Vector3(Random.Range(spawnMin, spawnMax), objectPosition.y, Random.Range(spawnMin, spawnMax));
 
             //Switch statement used to spawn the appropriate objects
             switch (timePeriod.GetTimePeriod())
