@@ -57,7 +57,8 @@ public class ProcGen : MonoBehaviour
     public float TestChunkTimer = 0.0f;
     public GameObject TestPlayer;
     public Transform PlayerTransform;
-
+    PlayerController pController;
+    public Enemy enemy;
     public float ChunkSize = 5.0f;
 
     public byte CurrentEra = 0;
@@ -82,6 +83,7 @@ public class ProcGen : MonoBehaviour
     {
         hazardManager = GameObject.FindObjectOfType<HazardManager>().GetComponent<HazardManager>();
         powerupManager = GameObject.Find("PowerupManager").GetComponent<PowerupManager>();
+        pController = PlayerTransform.GetComponent<PlayerController>();
     }
 
     private void Start()
@@ -344,7 +346,7 @@ public class ProcGen : MonoBehaviour
 
             Debug.Log(CurrentDir);
             Debug.Log(NewCurrentDir);
-
+            //Positive z Positive X                                                                   
             if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f,0.0f, ChunkSize * 1.5f);
@@ -352,6 +354,7 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f,270.0f,0.0f);
+                pController.roadRotation = enemy.roadRotation = -90.0f;
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
@@ -360,6 +363,7 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 180.0f, 0.0f);
+                pController.roadRotation = enemy.roadRotation = 180.0f;
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
@@ -368,6 +372,7 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
+                pController.roadRotation = enemy.roadRotation = 90.0f;
             }
             else if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
@@ -376,6 +381,7 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize * 1.5f, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
+                pController.roadRotation = enemy.roadRotation = 0.0f;
             }
 
             CSpawnedSections[1].SetActive(true);

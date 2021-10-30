@@ -27,7 +27,10 @@ public class PlayerController : MonoBehaviour
     public bool hasLetter3;
 
     public float damageTimer;
+    float rotationTimer = 0.0f;
 
+    //Current direction that procedural generation is doing
+    public float roadRotation = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -109,6 +112,8 @@ public class PlayerController : MonoBehaviour
         {
             moveSpeed = 15.0f;
         }
+
+        rotationTimer += Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -153,8 +158,14 @@ public class PlayerController : MonoBehaviour
 
         if (collider.tag == "Curved")
         {
-            Debug.Log("Collided with curved road");
-            transform.Rotate(0.0f, 90.0f, 0.0f);
+            if (rotationTimer >= 5.0f)
+            {
+                Debug.Log("Collided with curved road");
+                Quaternion q = transform.rotation;
+                Quaternion newQ = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
+                transform.rotation = newQ;
+                rotationTimer = 0.0f;
+            }
         }
     }
 
@@ -173,12 +184,6 @@ public class PlayerController : MonoBehaviour
         //    //Take damage/slow down
         //    takeDamage();
         //}
-
-       if (collider.tag == "onster")
-       {
-            Debug.Log("Collided with curved road");
-            transform.Rotate(0.0f, 90.0f, 0.0f);
-       }
 
     }
 

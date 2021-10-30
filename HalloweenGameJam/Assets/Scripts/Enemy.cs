@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     public float speedUpDistance = 75.0f;
     float constantYPos;
     private float soundTimer;
+    public float roadRotation = 0.0f;
+    float rotateTimer = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -47,8 +49,11 @@ public class Enemy : MonoBehaviour
 
         if(soundTimer > 10.0f)
         {
+            soundTimer = 0.0f;
             GetComponent<AudioSource>().Play();
         }
+
+        rotateTimer += Time.deltaTime;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -57,8 +62,14 @@ public class Enemy : MonoBehaviour
 
         if (collider.tag == "Curved")
         {
-            Debug.Log("Enemy Collided with curved road");
-            transform.Rotate(0.0f, 90.0f, 0.0f);
+            if (rotateTimer >= 5.0f)
+            {
+                Debug.Log("Enemy Collided with curved road");
+                Quaternion q = transform.rotation;
+                Quaternion newQ = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
+                transform.rotation = newQ;
+                rotateTimer = 0.0f;
+            }
         }
     }
 
