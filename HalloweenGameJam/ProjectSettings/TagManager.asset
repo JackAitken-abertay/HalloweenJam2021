@@ -12,6 +12,7 @@ TagManager:
   - letter2
   - letter3
   - monster
+  - Curved
   layers:
   - Default
   - TransparentFX

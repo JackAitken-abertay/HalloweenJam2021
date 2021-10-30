@@ -1193,6 +1193,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3420839039371412872, guid: 623826af2aaa0f846ad8b64f6ca211bd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a46d4989f7a85944b78e6f92bbc5731, type: 2}
     - target: {fileID: 3420839039371412875, guid: 623826af2aaa0f846ad8b64f6ca211bd, type: 3}
       propertyPath: m_Name
       value: Test Moving Hazard
