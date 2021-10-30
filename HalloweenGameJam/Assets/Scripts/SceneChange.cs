@@ -21,4 +21,9 @@ public class SceneChange : MonoBehaviour
     {
         SceneManager.LoadScene("Game Over");
     }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
 }
