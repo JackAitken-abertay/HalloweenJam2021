@@ -1,0 +1,14 @@
+Road Unity Size = 78.207
+
+SideSections In: Array Size 1 - Any GameObject (Preferabbly a big cube)
+Objects Per Side Cluster Array Size 1: 1
+NumOfEras = 3
+AllSections: ArraySize 6: RoadModernStraight1,RoadFutureStraight1,RoadOldStraight1,RoadModernCurved1,RoadFutureCurved1,RoadOldCurved1
+SectionsPerEra: ArraySize 6: All 1
+NumOfStraightSections: 3
+NumOfCurvedSections: 3
+SectionsAvaliableSideTab: ArraySize 6: All 0
+PlayerChunkIndex 0
+PlayerTransform: The Player Object/transform
+ChunkSize: 10
+Number Of Chunks To Load: 15
