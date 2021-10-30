@@ -12,3 +12,5 @@ PlayerChunkIndex 0
 PlayerTransform: The Player Object/transform
 ChunkSize: 10
 Number Of Chunks To Load: 15
+
+scale factor: .78207
