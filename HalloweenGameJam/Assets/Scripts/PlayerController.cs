@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     //Current direction that procedural generation is doing
     public float roadRotation = 0.0f;
+    public Vector2Int roadDirection = new Vector2Int(0,-1);
     // Start is called before the first frame update
     void Start()
     {
@@ -161,9 +162,27 @@ public class PlayerController : MonoBehaviour
             if (rotationTimer >= 5.0f)
             {
                 Debug.Log("Collided with curved road");
+                if (roadDirection == new Vector2Int(1, 0))
+                {
+                    //Turning to the right
+                    roadRotation = -90.0f;
+                }
+                if (roadDirection == new Vector2Int(-1, 0))
+                {
+                    roadRotation = 90.0f;
+                }
+                if (roadDirection == new Vector2Int(0, -1))
+                {
+                    roadRotation = 0.0f;
+                }
+                if (roadDirection == new Vector2Int(0, 1))
+                {
+                    roadRotation = 180.0f;
+                }
+
                 Quaternion q = transform.rotation;
-                Quaternion newQ = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
-                transform.rotation = newQ;
+                q = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
+                transform.rotation = q;
                 rotationTimer = 0.0f;
             }
         }

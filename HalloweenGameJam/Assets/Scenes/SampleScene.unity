@@ -155,13 +155,13 @@ MonoBehaviour:
   NumOfStraightSections: 3
   NumOfCurvedSections: 3
   SectionsAvaliableSideTab: 000000000000000000000000
-  PlayerChunkIndex: 12
+  PlayerChunkIndex: 10
   TestChunks: 0
   TestChunkTimer: 0
   TestPlayer: {fileID: 0}
   PlayerTransform: {fileID: 2815942866312676118}
   enemy: {fileID: 3231327875119202533}
-  ChunkSize: 10
+  ChunkSize: 20
   CurrentEra: 0
   AmountOfChunksToLoad: 15
 --- !u!1001 &230445099
@@ -776,11 +776,72 @@ Transform:
   m_GameObject: {fileID: 1278705437}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 20, y: 1, z: 20}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1928232837
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2879279913146274871, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3224174361828134541, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_Name
+      value: RoadModernCurved1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3224174361828134541, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
 --- !u!1 &1944614627
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +1027,7 @@ MonoBehaviour:
   hasLetter3: 0
   damageTimer: 0
   roadRotation: 0
+  roadDirection: {x: 0, y: -1}
 --- !u!143 &953382386348240598
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1113,7 +1175,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3197535611714836908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.85, z: 0}
+  m_LocalPosition: {x: 0, y: 4.85, z: -9.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8216023079167365712}
@@ -1433,6 +1495,7 @@ MonoBehaviour:
   currentSpeed: 0
   speedUpDistance: 75
   roadRotation: 0
+  roadDirection: {x: 0, y: -1}
 --- !u!65 &3231327875119202534
 BoxCollider:
   m_ObjectHideFlags: 0
