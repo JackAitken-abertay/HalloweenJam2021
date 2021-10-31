@@ -306,6 +306,9 @@ public class ProcGen : MonoBehaviour
             ChunkToSpawn = StraightSections[CurrentEra][Random.Range(0, StraightSections[CurrentEra].Length)];
             RoadRot = Quaternion.Euler(-90.0f, CurrentDir.x != 0 ? 0.0f : 90.0f, 0.0f);
 
+            Debug.Log("THIS: " + ChunkToSpawn.OriginalIndex);
+            Debug.Log("THIS2: " + SideSections[ChunkToSpawn.OriginalIndex][0].name);
+
             for (int i = 1; i < 3; i++)
             {
                 GameObject[] AvalSides = SideSections[ChunkToSpawn.OriginalIndex];
