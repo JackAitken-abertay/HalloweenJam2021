@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8583021090375593077}
   - component: {fileID: 4662034449843282896}
   - component: {fileID: 7446184012338042650}
+  - component: {fileID: -8620035389930745067}
   m_Layer: 0
   m_Name: lolipop
   m_TagString: Speed
@@ -82,3 +83,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-8620035389930745067
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8959582259832534735}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.08582176, y: 0.16718133, z: 0.03521193}
+  m_Center: {x: -0.0021409243, y: -0.04297235, z: -0.0061118645}
