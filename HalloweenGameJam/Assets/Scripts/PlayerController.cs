@@ -22,9 +22,6 @@ public class PlayerController : MonoBehaviour
     public float speedTimer;
     public bool hasSpeed;
     public bool hasShield;
-    public bool hasLetter1;
-    public bool hasLetter2;
-    public bool hasLetter3;
 
     public float damageTimer;
     float rotationTimer = 0.0f;
@@ -32,24 +29,25 @@ public class PlayerController : MonoBehaviour
     //Current direction that procedural generation is doing
     public float roadRotation = 0.0f;
     public Vector2Int roadDirection = new Vector2Int(0,-1);
+
+    private void Awake()
+    {
+        controller = GetComponent<CharacterController>();
+        timePeriod = GameObject.Find("TimePeriodManager").GetComponent<TimePeriod>();
+        screenFade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
+        sceneChange = GameObject.Find("SceneManager").GetComponent<SceneChange>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Please Work");
-        controller = GetComponent<CharacterController>();
 
         //Initialising variables to do with powerups
         speedTimer = 0.0f;
         hasShield = false;
-        hasLetter1 = false;
-        hasLetter2 = false;
-        hasLetter3 = false;
 
         score = 0;
-
-        timePeriod = GameObject.Find("TimePeriodManager").GetComponent<TimePeriod>();
-        screenFade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
-        sceneChange = GameObject.Find("SceneManager").GetComponent<SceneChange>();
     }
 
     // Update is called once per frame
@@ -87,21 +85,14 @@ public class PlayerController : MonoBehaviour
         //Start a timer for changing the speed of the player if they picked up the powerup
         if(speedTimer > 0.0f)
         {
-            moveSpeed = 25.0f;
             speedTimer -= Time.deltaTime;
         }
         else
         {
-            moveSpeed = 15.0f;
-        }
-
-        //If the player has all the letter powerups then add a lot to their score
-        if(hasLetter1 && hasLetter2 && hasLetter3)
-        {
-            score += 2000;
-            hasLetter1 = false;
-            hasLetter2 = false;
-            hasLetter3 = false;
+            if(damageTimer <= 0.0f)
+            {
+                moveSpeed = 15.0f;
+            }
         }
 
         //Have a timer for when your speed goes back to normal
@@ -111,7 +102,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            moveSpeed = 15.0f;
+            if (speedTimer <= 0.0f)
+            {
+                moveSpeed = 15.0f;
+            }
         }
 
         rotationTimer += Time.deltaTime;
@@ -119,10 +113,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        switch (other.tag)
+          switch (other.tag)
         {
             //Can change these over to an enum if needed
-            case "Speed": speedTimer = 5.0f; break;
+            case "Speed": speedTimer = 5.0f; moveSpeed = 25.0f; break;
             case "Shield": hasShield = true; break;
             case "Time": 
                 if(timePeriod.GetTimePeriod() == Period.FUTURE)
@@ -133,15 +127,13 @@ public class PlayerController : MonoBehaviour
                 {
                     timePeriod.SetTimePeriod(Period.PAST);
                 }
-                screenFade.FadeToWhite();
+                fadeToWhite();
                 screenFade.FadeIn();
                 break;
             case "monster": sceneChange.GameOver(); break;
-            case "letter1":  hasLetter1 = true; break;
-            case "letter2": hasLetter2 = true; break;
-            case "letter3": hasLetter3 = true; break;
             case "Candy": score += 10; break;
-            case "Hazard":
+            case "Pumpkin": score += 30; break;
+            case "Destroyable":
                 Hazard h = other.GetComponent<Hazard>();
 
                 if (h.type == HazardType.SLOW)
@@ -149,8 +141,16 @@ public class PlayerController : MonoBehaviour
                     takeDamage();
                 }
                 break;
-                
         }
+
+        Destroy(other.gameObject);
+        Debug.Log("Powerup Destroyed");
+    }
+
+    IEnumerator fadeToWhite()
+    {
+        screenFade.FadeToWhite();
+        yield return new WaitForSeconds(2.0f);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

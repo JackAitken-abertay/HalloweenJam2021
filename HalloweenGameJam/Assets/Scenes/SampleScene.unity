@@ -600,19 +600,19 @@ MonoBehaviour:
   - {fileID: 8959582259832534735, guid: a3fe526a8ecdd3b4bacf4bf2bee47f22, type: 3}
   - {fileID: 2801061449370319063, guid: 209dce8b4d460ff4dbb1bf5df04aea07, type: 3}
   - {fileID: 126855746223119163, guid: 3df425edf9ebf4746a7cca403e69cb09, type: 3}
-  - {fileID: 8548553952704810561, guid: 0f4481c9fca4da04695714f1fe76561e, type: 3}
+  - {fileID: 2841093991152763340, guid: 713ff39221143a347b63f9938a45d8fb, type: 3}
   presentPowerups:
   - {fileID: 5917848478091446242, guid: 5aab28977659c6349b7f0c7ce028260b, type: 3}
   - {fileID: 8959582259832534735, guid: a3fe526a8ecdd3b4bacf4bf2bee47f22, type: 3}
   - {fileID: 2801061449370319063, guid: 209dce8b4d460ff4dbb1bf5df04aea07, type: 3}
   - {fileID: 126855746223119163, guid: 3df425edf9ebf4746a7cca403e69cb09, type: 3}
-  - {fileID: 198697944174616333, guid: 53d609fdcd5ad9841a4b22f90ad03a54, type: 3}
+  - {fileID: 2841093991152763340, guid: 713ff39221143a347b63f9938a45d8fb, type: 3}
   pastPowerups:
   - {fileID: 5917848478091446242, guid: 5aab28977659c6349b7f0c7ce028260b, type: 3}
   - {fileID: 8959582259832534735, guid: a3fe526a8ecdd3b4bacf4bf2bee47f22, type: 3}
   - {fileID: 2801061449370319063, guid: 209dce8b4d460ff4dbb1bf5df04aea07, type: 3}
   - {fileID: 126855746223119163, guid: 3df425edf9ebf4746a7cca403e69cb09, type: 3}
-  - {fileID: 1437982978135789793, guid: 1ea7d22e2346ed841adae3f19eea6d5a, type: 3}
+  - {fileID: 2841093991152763340, guid: 713ff39221143a347b63f9938a45d8fb, type: 3}
 --- !u!4 &994570071
 Transform:
   m_ObjectHideFlags: 0
@@ -838,7 +838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3224174361828134541, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f8656c35da33eb4da45d8d503cb42d3, type: 3}
@@ -1022,9 +1022,6 @@ MonoBehaviour:
   speedTimer: 0
   hasSpeed: 0
   hasShield: 0
-  hasLetter1: 0
-  hasLetter2: 0
-  hasLetter3: 0
   damageTimer: 0
   roadRotation: 0
   roadDirection: {x: 0, y: -1}

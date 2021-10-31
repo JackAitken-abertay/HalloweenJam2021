@@ -78,9 +78,6 @@ public class HazardManager : MonoBehaviour
         for (int i = 0; i < howManyTimes; i++)
         {
             spawnPosition = new Vector3(Random.Range(spawnMinX, spawnMaxX), objectPosition.y, Random.Range(spawnMinZ, spawnMaxZ));
-            Debug.Log(spawnPosition.x);
-            Debug.Log(spawnPosition.y);
-            Debug.Log(spawnPosition.z);
 
             //Switch statement used to spawn the appropriate objects
             switch (timePeriod.GetTimePeriod())

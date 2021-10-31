@@ -61,9 +61,9 @@ public class PowerupManager : MonoBehaviour
             //Switch statement used to spawn the appropriate objects
             switch (timePeriod.GetTimePeriod())
             {
-                case Period.FUTURE: Instantiate(futurePowerups[Random.Range(0, 3)], spawnPosition, Quaternion.identity); break;
-                case Period.PRESENT: Instantiate(presentPowerups[Random.Range(0, 3)], spawnPosition, Quaternion.identity); break;
-                case Period.PAST: Instantiate(pastPowerups[Random.Range(0, 3)], spawnPosition, Quaternion.identity); break;
+                case Period.FUTURE: Instantiate(futurePowerups[Random.Range(0, 5)], spawnPosition, Quaternion.identity); break;
+                case Period.PRESENT: Instantiate(presentPowerups[Random.Range(0, 5)], spawnPosition, Quaternion.identity); break;
+                case Period.PAST: Instantiate(pastPowerups[Random.Range(0, 5)], spawnPosition, Quaternion.identity); break;
             }
         }
     }

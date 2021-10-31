@@ -14,6 +14,7 @@ TagManager:
   - monster
   - Curved
   - Destroyable
+  - Pumpkin
   layers:
   - Default
   - TransparentFX
