@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 4458461359829260546}
   - component: {fileID: -2500362487343463667}
   m_Layer: 0
-  m_Name: shield 1
-  m_TagString: Untagged
+  m_Name: shield
+  m_TagString: Destroyable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4900917564692467114}
   m_Layer: 0
   m_Name: Candy
-  m_TagString: Candy
+  m_TagString: Destroyable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -13,6 +13,7 @@ TagManager:
   - letter3
   - monster
   - Curved
+  - Destroyable
   layers:
   - Default
   - TransparentFX
