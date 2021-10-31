@@ -82,7 +82,7 @@ public class ProcGen : MonoBehaviour
     private void Awake()
     {
         hazardManager = GameObject.FindObjectOfType<HazardManager>().GetComponent<HazardManager>();
-        powerupManager = GameObject.Find("PowerupManager").GetComponent<PowerupManager>();
+        powerupManager = GameObject.FindObjectOfType<PowerupManager>().GetComponent<PowerupManager>();
         pController = PlayerTransform.GetComponent<PlayerController>();
     }
 
@@ -412,6 +412,6 @@ public class ProcGen : MonoBehaviour
         CurrentDir = NewCurrentDir;
 
         hazardManager.spawnHazards(NewChunkSpawnPos, 1);
-        //powerupManager.spawnPowerups(NewChunkSpawnPos, 2);
+        powerupManager.spawnPowerups(NewChunkSpawnPos, 2);
     }   
 }
