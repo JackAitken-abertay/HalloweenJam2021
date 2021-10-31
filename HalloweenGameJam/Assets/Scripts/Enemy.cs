@@ -4,110 +4,133 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    CharacterController controller;
     [SerializeField] GameObject playerObject;
-    PlayerController player;
+    GameObject EnemyIn;
 
     public float defaultSpeed = 8.0f;
     public float boostSpeed = 15.0f;
     public float currentSpeed;
-    public float speedUpDistance = 75.0f;
+    public float speedUpDistance = 20.0f;
     float constantYPos;
     private float soundTimer;
     public float roadRotation = 0.0f;
-    float rotateTimer = 0.0f;
+    public static GameObject EnemyRef;
+
+    public static int EnemiesCSectionIndex = 2;
+    public Vector2Int CDir = new Vector2Int(0, -1);
 
     public Vector2Int roadDirection = new Vector2Int(0, -1);
 
-    // Start is called before the first frame update
-    void Start()
+    public static float ChunkSize;
+
+    Vector3 TargetPos;
+
+    Vector2Int NextChunk;
+    Vector2Int CurrentChunk;
+
+    HashSet<string> DestroyStrings = new HashSet<string>()
     {
-        //Get reference to player
-        player = playerObject.GetComponent<PlayerController>();
+        "Time",
+        "Speed",
+        "Shield",
+        "Pumpkin",
+        "Candy",
+        "Destroyable",
+    };
+
+    void SetNextChunk()
+    {
+        NextChunk = ProcGen.LoadedSections[EnemiesCSectionIndex - 1].ChunkPos;
+
+        CDir = NextChunk - CurrentChunk;
+
+        TargetPos = new Vector3(NextChunk.x * ChunkSize, 1.0f, NextChunk.y * ChunkSize);
+    }
+
+    public void PassedTrigger()
+    {
+       
+        CurrentChunk += CDir;
+        EnemiesCSectionIndex--;
+
+        SetNextChunk();
+
+        this.transform.rotation = CDir.x != 0 ? (CDir.x == 1 ? Quaternion.Euler(0.0f, 90.0f, 0.0f) : Quaternion.Euler(0.0f, -90.0f, 0.0f)) : (CDir.y == 1 ? Quaternion.Euler(0.0f, 0.0f, 0.0f) : Quaternion.Euler(0.0f, 180.0f, 0.0f));
+    }
+
+    private void Start()
+    {
         currentSpeed = defaultSpeed;
-        controller = GetComponent<CharacterController>();
-        constantYPos = transform.position.y;
+        SetNextChunk();
+    }
+
+    private void Awake()
+    {
+        EnemyRef = this.gameObject;
+        CurrentChunk = ProcGen.CurrentDir * EnemiesCSectionIndex;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 movement = transform.forward * currentSpeed;
-        controller.Move(movement * Time.deltaTime);
-
         float distanceToPlayer = Vector3.Distance(transform.position, playerObject.transform.position);
 
         if (distanceToPlayer > speedUpDistance)
         {
             currentSpeed = boostSpeed;
         }
-
-        if (distanceToPlayer < speedUpDistance)
+        else
         {
             currentSpeed = defaultSpeed;
         }
 
         soundTimer += Time.deltaTime;
 
-        if(soundTimer > 10.0f)
+        if (soundTimer > 10.0f)
         {
             soundTimer = 0.0f;
-            GetComponent<AudioSource>().Play();
+            //GetComponent<AudioSource>().Play();
         }
 
-        rotateTimer += Time.deltaTime;
-    }
+        float ActMovement = Time.deltaTime * currentSpeed;
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        GameObject collider = hit.gameObject;
-
-        if (collider.tag == "Curved")
+        if (CDir.magnitude != 1)
         {
-            if (rotateTimer >= 5.0f)
+            Debug.Log(CDir);
+            Debug.Break();
+        }
+        this.transform.position += new Vector3(ActMovement * CDir.x, 0.0f, ActMovement * CDir.y);
+
+        bool DoSnap = false;
+
+        float CheckDist = 0.09f;
+
+        if (ActMovement > 0.3f)
+        {
+            CheckDist = ActMovement * ActMovement;
+        }
+        if ((this.transform.position - TargetPos).sqrMagnitude <= CheckDist)
+        {
+            DoSnap = true;
+        }
+
+        if (DoSnap)
+        {
+            PassedTrigger();
+        }
+
+        Collider[] HitObjs = Physics.OverlapBox(this.transform.position, new Vector3(ChunkSize, 50.0f, 5f), this.transform.rotation);
+
+        for (int i = 0; i < HitObjs.Length; i++)
+        {
+            if (DestroyStrings.Contains(HitObjs[i].gameObject.tag))
             {
-                Debug.Log("Enemy Collided with curved road");
-                
-                if (roadDirection == new Vector2Int(1,0))
-                {
-                    roadRotation = -90.0f;
-                }
-                if (roadDirection == new Vector2Int(-1, 0))
-                {
-                    roadRotation = 90.0f;
-                }
-                if (roadDirection == new Vector2Int(0,-1))
-                {
-                    roadRotation = -180.0f;
-                }
-                if (roadDirection == new Vector2Int(0,1))
-                {
-                    roadRotation = 0.0f;
-                }
-
-                Quaternion q = transform.rotation;
-                q = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
-                transform.rotation = q;
-                rotateTimer = 0.0f;
+                Destroy(HitObjs[i].gameObject);
             }
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "Collectable")
-        {
-            Destroy(collision.gameObject);
-        }
-
-        if (collision.gameObject.tag == "Obstacle")
-        {
-            Destroy(collision.gameObject);
-        }
-
-        if (collision.gameObject.tag == "Curved")
-        {
-            transform.Rotate(0.0f, 90.0f, 0.0f);
+            else if (HitObjs[i].gameObject.tag == "Player")
+            {
+                playerObject.GetComponent<PlayerController>().GameOver();
+            }
         }
     }
 }

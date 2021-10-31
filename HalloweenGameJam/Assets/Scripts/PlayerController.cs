@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
     TimePeriod timePeriod;
     ScreenFade screenFade;
     SceneChange sceneChange;
-
+ 
     //Initial variable to control score
     public int score;
 
@@ -30,24 +31,27 @@ public class PlayerController : MonoBehaviour
     public float roadRotation = 0.0f;
     public Vector2Int roadDirection = new Vector2Int(0,-1);
 
+    [SerializeField] Text ScoreText;
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         timePeriod = GameObject.Find("TimePeriodManager").GetComponent<TimePeriod>();
-        screenFade = GameObject.Find("Screen Fade").GetComponent<ScreenFade>();
+        screenFade = GameObject.Find("FadeImage").GetComponent<ScreenFade>();
         sceneChange = GameObject.Find("SceneManager").GetComponent<SceneChange>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Please Work");
 
         //Initialising variables to do with powerups
         speedTimer = 0.0f;
         hasShield = false;
 
         score = 0;
+
+        RefreshUI();
     }
 
     // Update is called once per frame
@@ -114,6 +118,18 @@ public class PlayerController : MonoBehaviour
         {
             sceneChange.GameOver();
         }
+
+        if(transform.position.y < -20.0f)
+        {
+            GameOver();
+        }
+
+        RefreshUI();
+    }
+
+    void RefreshUI()
+    {
+        ScoreText.text = "Score: " + score;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -127,15 +143,16 @@ public class PlayerController : MonoBehaviour
                 if(timePeriod.GetTimePeriod() == Period.FUTURE)
                 {
                     timePeriod.SetTimePeriod(Period.PRESENT);
+                    ProcGen.CurrentEra = 1;
                 }
                 else if (timePeriod.GetTimePeriod() == Period.PRESENT)
                 {
                     timePeriod.SetTimePeriod(Period.PAST);
+                    ProcGen.CurrentEra = 2;
                 }
-                fadeToWhite();
-                screenFade.FadeIn();
+                screenFade.FadeToWhite();
+                StartCoroutine(fadeToWhite());
                 break;
-            case "monster": sceneChange.GameOver(); break;
             case "Candy": score += 10; break;
             case "Pumpkin": score += 30; break;
             case "Destroyable":
@@ -154,8 +171,13 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator fadeToWhite()
     {
-        screenFade.FadeToWhite();
         yield return new WaitForSeconds(2.0f);
+        screenFade.FadeIn();
+    }
+
+    public void GameOver()
+    {
+        sceneChange.GameOver();
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)

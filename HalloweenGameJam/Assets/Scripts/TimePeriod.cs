@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum Period
 {
-    FUTURE, PRESENT, PAST
+    FUTURE = 0, PRESENT = 1, PAST = 2
 }
 
 public class TimePeriod : MonoBehaviour
@@ -15,7 +15,7 @@ public class TimePeriod : MonoBehaviour
     void Start()
     {
         //Initially set up the time period as the future
-        period = Period.PRESENT; 
+        period = Period.FUTURE; 
     }
 
     // Update is called once per frame

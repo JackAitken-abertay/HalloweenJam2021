@@ -38,9 +38,9 @@ public class ProcGen : MonoBehaviour
         },
     };
 
-    ChunkData[] LoadedSections;
+    public static ChunkData[] LoadedSections;
 
-    static readonly SectionStruct NullStruct = new SectionStruct(null,0);
+    static readonly SectionStruct NullStruct = new SectionStruct(null, 0);
 
     public int NumOfEras;
     public GameObject[] AllSections;
@@ -57,18 +57,17 @@ public class ProcGen : MonoBehaviour
     public float TestChunkTimer = 0.0f;
     public GameObject TestPlayer;
     public Transform PlayerTransform;
-    PlayerController pController;
-    public Enemy enemy;
+
     public float ChunkSize = 5.0f;
 
-    public byte CurrentEra = 0;
+    static public byte CurrentEra = 0;
 
     float TriggerPos;
     bool TriggerYAxis;
     bool TriggerCheckMoreThan;
 
     Vector2Int CurrentChunk = new Vector2Int(0, 0);
-    Vector2Int CurrentDir = new Vector2Int(0, -1);
+    public static Vector2Int CurrentDir = new Vector2Int(0, -1);
     Vector2Int CurrentLastLoadedChunk = new Vector2Int(0, 0);
 
     public int AmountOfChunksToLoad = 5;
@@ -78,12 +77,17 @@ public class ProcGen : MonoBehaviour
 
     HazardManager hazardManager;
     PowerupManager powerupManager;
+    TimePeriod t;
+    PlayerController playerController;
+    Enemy enemy;
 
     private void Awake()
     {
         hazardManager = GameObject.FindObjectOfType<HazardManager>().GetComponent<HazardManager>();
         powerupManager = GameObject.FindObjectOfType<PowerupManager>().GetComponent<PowerupManager>();
-        pController = PlayerTransform.GetComponent<PlayerController>();
+        t = GameObject.FindObjectOfType<TimePeriod>().GetComponent<TimePeriod>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        enemy = GameObject.Find("Ugpin").GetComponent<Enemy>();
     }
 
     private void Start()
@@ -94,16 +98,21 @@ public class ProcGen : MonoBehaviour
 
         SideSections = new GameObject[ObjectsPerSideCluster.Length][];
 
+        Enemy.ChunkSize = ChunkSize;
+
         if (TestPlayer != null)
         {
             PlayerTransform = TestPlayer.transform;
         }
 
         float PlayerStartPos = CurrentDir.y * PlayerChunkIndex;
+        float EnemyStartPos = CurrentDir.y * Enemy.EnemiesCSectionIndex;
 
         PlayerChunkIndex = AmountOfChunksToLoad - PlayerChunkIndex - 1;
+        Enemy.EnemiesCSectionIndex = AmountOfChunksToLoad - Enemy.EnemiesCSectionIndex;
 
         PlayerTransform.position = new Vector3(0.0f, 1.0f, PlayerStartPos * ChunkSize);
+        Enemy.EnemyRef.transform.position = new Vector3(0.0f, 1.0f, EnemyStartPos * ChunkSize);
 
         int SideSectionIndex = 0;
 
@@ -140,29 +149,23 @@ public class ProcGen : MonoBehaviour
             }
         }
 
-        Debug.Log("Section Setup");
-        Debug.Log(StraightSections.Length);
         for (int i = 0; i < StraightSections.Length; i++)
         {
-            Debug.Log(StraightSections[i].Length);
 
             for (int j = 0; j < StraightSections[i].Length; j++)
             {
-                Debug.Log(StraightSections[i][j].Obj.name);
+              
             }
         }
 
-        Debug.Log(CurvedSections.Length);
         for (int i = 0; i < CurvedSections.Length; i++)
         {
-            Debug.Log(CurvedSections[i].Length);
 
             for (int j = 0; j < StraightSections[i].Length; j++)
             {
-                Debug.Log(CurvedSections[i][j].Obj.name);
+                
             }
         }
-        Debug.Log("=====");
 
         for (int i = 0; i < AmountOfChunksToLoad; i++)
         {
@@ -185,6 +188,11 @@ public class ProcGen : MonoBehaviour
             }
         }
 
+        triggerCheck();
+    }
+
+    void triggerCheck()
+    {
         if (TriggerYAxis)
         {
             if (TriggerCheckMoreThan)
@@ -192,6 +200,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.z > TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
             else
@@ -199,6 +208,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.z < TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
         }
@@ -209,6 +219,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.x > TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
             else
@@ -216,6 +227,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.x < TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
         }
@@ -241,12 +253,12 @@ public class ProcGen : MonoBehaviour
 
                 if (CurrentDir.x != 0)
                 {
-                    NewCurrentDir = Random.Range(0, 2) == 0 ? new Vector2Int(0,1) : new Vector2Int(0,-1);
+                    NewCurrentDir = Random.Range(0, 2) == 0 ? new Vector2Int(0, 1) : new Vector2Int(0, -1);
                     SavedSideVecs = SavedSideVecsAll[0];
                 }
                 else
                 {
-                    NewCurrentDir = Random.Range(0, 2) == 0 ? new Vector2Int(1,0) : new Vector2Int(-1,0);
+                    NewCurrentDir = Random.Range(0, 2) == 0 ? new Vector2Int(1, 0) : new Vector2Int(-1, 0);
                     SavedSideVecs = SavedSideVecsAll[1];
                 }
 
@@ -344,17 +356,14 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[i] = Instantiate(AvalSides[Random.Range(0, AvalSides.Length)]);
             }
 
-            Debug.Log(CurrentDir);
-            Debug.Log(NewCurrentDir);
-            //Positive z Positive X                                                                   
             if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
-                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f,0.0f, ChunkSize);
+                CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, ChunkSize);
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, 0.0f);
 
-                RoadRot = Quaternion.Euler(-90.0f,270.0f,0.0f);
-                pController.roadDirection = enemy.roadDirection = NewCurrentDir;
+                RoadRot = Quaternion.Euler(-90.0f, 270.0f, 0.0f);
+                playerController.roadDirection = enemy.roadDirection = NewCurrentDir;
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(1, 0)) || (CurrentDir == new Vector2Int(-1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
@@ -363,27 +372,25 @@ public class ProcGen : MonoBehaviour
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(-ChunkSize, 0.0f, 0.0f);
 
                 RoadRot = Quaternion.Euler(-90.0f, 180.0f, 0.0f);
-                pController.roadDirection = enemy.roadDirection = NewCurrentDir;
+                playerController.roadDirection = enemy.roadDirection = NewCurrentDir;
             }
             else if ((CurrentDir == new Vector2Int(0, -1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, 1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, -ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, -ChunkSize);
                 CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, 0.0f);
-                Debug.Log("Turn to the straight");
 
                 RoadRot = Quaternion.Euler(-90.0f, 90.0f, 0.0f);
-                pController.roadDirection = enemy.roadDirection = NewCurrentDir;
+                playerController.roadDirection = enemy.roadDirection = NewCurrentDir;
             }
             else if ((CurrentDir == new Vector2Int(0, 1) && NewCurrentDir == new Vector2Int(-1, 0)) || (CurrentDir == new Vector2Int(1, 0) && NewCurrentDir == new Vector2Int(0, -1)))
             {
                 CSpawnedSections[1].transform.position = NewChunkSpawnPos + new Vector3(0.0f, 0.0f, ChunkSize);
                 CSpawnedSections[2].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, ChunkSize);
-                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize , 0.0f, 0.0f);
+                CSpawnedSections[3].transform.position = NewChunkSpawnPos + new Vector3(ChunkSize, 0.0f, 0.0f);
 
-                Debug.Log("Turn to the left");
                 RoadRot = Quaternion.Euler(-90.0f, 0.0f, 0.0f);
-                pController.roadDirection = enemy.roadDirection = NewCurrentDir;
+                playerController.roadDirection = enemy.roadDirection = NewCurrentDir;
             }
 
             CSpawnedSections[1].SetActive(true);
@@ -396,6 +403,9 @@ public class ProcGen : MonoBehaviour
         GameObject NewChunk = Instantiate(ChunkToSpawn.Obj, NewChunkSpawnPos, RoadRot, null);
         CSpawnedSections[0] = NewChunk;
         LoadedSections[0] = new ChunkData(CSpawnedSections, CurrentChunk);
+
+        hazardManager.spawnHazards(NewChunkSpawnPos, 1);
+        powerupManager.spawnPowerups(NewChunkSpawnPos, 1);
 
         ChunkToSpawn.Obj.SetActive(false);
 
@@ -412,8 +422,5 @@ public class ProcGen : MonoBehaviour
         }
 
         CurrentDir = NewCurrentDir;
-
-        hazardManager.spawnHazards(NewChunkSpawnPos, 1);
-        powerupManager.spawnPowerups(NewChunkSpawnPos, 2);
-    }   
+    }
 }
