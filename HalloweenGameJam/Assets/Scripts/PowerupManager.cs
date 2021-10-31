@@ -49,14 +49,14 @@ public class PowerupManager : MonoBehaviour
     public void spawnPowerups(Vector3 objectPosition, int howManyTimes)
     {
         //Position will be object position in the final product
-        spawnMaxX = objectPosition.x + 5.0f;
-        spawnMinX = objectPosition.x - 5.0f;
+        spawnMaxX = objectPosition.x + 10.0f;
+        spawnMinX = objectPosition.x - 10.0f;
         spawnMinZ = objectPosition.z - 5.0f;
         spawnMaxZ = objectPosition.z + 5.0f;
 
         for (int i = 0; i < howManyTimes; i++)
         {
-            Vector3 spawnPosition = new Vector3(Random.Range(spawnMinX, spawnMaxX), objectPosition.y, Random.Range(spawnMinZ, spawnMaxZ));
+            Vector3 spawnPosition = new Vector3(Random.Range(spawnMinX, spawnMaxX), objectPosition.y + 1.0f, Random.Range(spawnMinZ, spawnMaxZ));
             
             //Switch statement used to spawn the appropriate objects
             switch (timePeriod.GetTimePeriod())

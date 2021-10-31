@@ -70,8 +70,8 @@ public class HazardManager : MonoBehaviour
         //Maybe do something like "if direction is a certain way, spawn based on x axis, else do it on z-axis"
 
         //Assigning values for a max and min spawn area
-        spawnMaxX = objectPosition.x + 5.0f;
-        spawnMinX = objectPosition.x - 5.0f;
+        spawnMaxX = objectPosition.x + 10.0f;
+        spawnMinX = objectPosition.x - 10.0f;
         spawnMinZ = objectPosition.z - 5.0f;
         spawnMaxZ = objectPosition.z + 5.0f;
 
