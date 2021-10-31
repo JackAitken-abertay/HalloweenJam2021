@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour
         if (soundTimer > 10.0f)
         {
             soundTimer = 0.0f;
-            //GetComponent<AudioSource>().Play();
+            GetComponent<AudioSource>().Play();
         }
 
         float ActMovement = Time.deltaTime * currentSpeed;

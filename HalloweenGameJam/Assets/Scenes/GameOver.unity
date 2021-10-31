@@ -295,11 +295,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Try Again?
-
-    Enter - Yes
-
-    Esc - No'
+  m_Text: Press Esc to close
 --- !u!222 &850128407
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -731,10 +727,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2086558519}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9007be8082ea4614492c51e37901d298, type: 3}
+  m_Script: {fileID: 11500000, guid: 81aed7f9f59b9174ca1dbb64be284aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instructionPanel: {fileID: 0}
 --- !u!114 &2086558521
 MonoBehaviour:
   m_ObjectHideFlags: 0
