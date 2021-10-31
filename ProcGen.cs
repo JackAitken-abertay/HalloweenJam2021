@@ -38,7 +38,7 @@ public class ProcGen : MonoBehaviour
         },
     };
 
-    ChunkData[] LoadedSections;
+    public static ChunkData[] LoadedSections;
 
     static readonly SectionStruct NullStruct = new SectionStruct(null,0);
 
@@ -67,7 +67,7 @@ public class ProcGen : MonoBehaviour
     bool TriggerCheckMoreThan;
 
     Vector2Int CurrentChunk = new Vector2Int(0, 0);
-    Vector2Int CurrentDir = new Vector2Int(0, -1);
+    public static Vector2Int CurrentDir = new Vector2Int(0, -1);
     Vector2Int CurrentLastLoadedChunk = new Vector2Int(0, 0);
 
     public int AmountOfChunksToLoad = 5;
@@ -83,16 +83,21 @@ public class ProcGen : MonoBehaviour
 
         SideSections = new GameObject[ObjectsPerSideCluster.Length][];
 
+        Enemy.ChunkSize = ChunkSize;
+
         if (TestPlayer != null)
         {
             PlayerTransform = TestPlayer.transform;
         }
 
         float PlayerStartPos = CurrentDir.y * PlayerChunkIndex;
+        float EnemyStartPos = CurrentDir.y * Enemy.EnemiesCSectionIndex;
 
         PlayerChunkIndex = AmountOfChunksToLoad - PlayerChunkIndex - 1;
+        Enemy.EnemiesCSectionIndex = AmountOfChunksToLoad - Enemy.EnemiesCSectionIndex;
 
         PlayerTransform.position = new Vector3(0.0f, 1.0f, PlayerStartPos * ChunkSize);
+        Enemy.EnemyRef.transform.position = new Vector3(0.0f, 1.0f, EnemyStartPos * ChunkSize);
 
         int SideSectionIndex = 0;
 
@@ -181,6 +186,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.z > TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
             else
@@ -188,6 +194,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.z < TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
         }
@@ -198,6 +205,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.x > TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
             else
@@ -205,6 +213,7 @@ public class ProcGen : MonoBehaviour
                 if (PlayerTransform.position.x < TriggerPos)
                 {
                     LoadNewChunk();
+                    Enemy.EnemiesCSectionIndex++;
                 }
             }
         }
