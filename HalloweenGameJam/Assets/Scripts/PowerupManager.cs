@@ -10,20 +10,27 @@ public class PowerupManager : MonoBehaviour
 
     //Variables for the max and min positions to spawn an object on.
     //Want to keep as variables so that if we use turns they arent spawning outside the turns
-    private float spawnMin;
-    private float spawnMax;
+    private float spawnMinX;
+    private float spawnMaxX;
+    private float spawnMinZ;
+    private float spawnMaxZ;
 
     float timer;
 
     //Instance of the class needed for altering the time period
     TimePeriod timePeriod;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         timer = 0;
         //Will need access to a time period manager - do that here
         timePeriod = GameObject.Find("TimePeriodManager").GetComponent<TimePeriod>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+      
     }
 
     // Update is called once per frame
@@ -42,12 +49,14 @@ public class PowerupManager : MonoBehaviour
     public void spawnPowerups(Vector3 objectPosition, int howManyTimes)
     {
         //Position will be object position in the final product
-        spawnMax = objectPosition.x + 5.0f;
-        spawnMin = objectPosition.x - 5.0f;
+        spawnMaxX = objectPosition.x + 5.0f;
+        spawnMinX = objectPosition.x - 5.0f;
+        spawnMinZ = objectPosition.z - 5.0f;
+        spawnMaxZ = objectPosition.z + 5.0f;
 
         for (int i = 0; i < howManyTimes; i++)
         {
-            Vector3 spawnPosition = new Vector3(Random.Range(spawnMin, spawnMax), objectPosition.y, Random.Range(spawnMin, spawnMax));
+            Vector3 spawnPosition = new Vector3(Random.Range(spawnMinX, spawnMaxX), objectPosition.y, Random.Range(spawnMinZ, spawnMaxZ));
             
             //Switch statement used to spawn the appropriate objects
             switch (timePeriod.GetTimePeriod())

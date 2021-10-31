@@ -15,7 +15,7 @@ public class TimePeriod : MonoBehaviour
     void Start()
     {
         //Initially set up the time period as the future
-        period = Period.FUTURE; 
+        period = Period.PRESENT; 
     }
 
     // Update is called once per frame

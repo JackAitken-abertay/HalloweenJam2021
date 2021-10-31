@@ -11,8 +11,10 @@ public class HazardManager : MonoBehaviour
 
     //Variables for the max and min positions to spawn an object on.
     //Want to keep as variables so that if we use turns they arent spawning outside the turns
-    private float spawnMin;
-    private float spawnMax;
+    private float spawnMinX;
+    private float spawnMaxX;
+    private float spawnMinZ;
+    private float spawnMaxZ;
 
     //TO DELETE
     float spawnTimer;
@@ -46,18 +48,18 @@ public class HazardManager : MonoBehaviour
         //    spawnTimer = 0.0f;
         //}
 
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            timePeriod.SetTimePeriod(Period.PAST);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            timePeriod.SetTimePeriod(Period.PRESENT);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            timePeriod.SetTimePeriod(Period.FUTURE);
-        }
+        //if(Input.GetKeyDown(KeyCode.A))
+        //{
+        //    timePeriod.SetTimePeriod(Period.PAST);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    timePeriod.SetTimePeriod(Period.PRESENT);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.D))
+        //{
+        //    timePeriod.SetTimePeriod(Period.FUTURE);
+        //}
     }
 
     //Function for spawning the hazards
@@ -65,13 +67,20 @@ public class HazardManager : MonoBehaviour
     {
         Vector3 spawnPosition;
         
+        //Maybe do something like "if direction is a certain way, spawn based on x axis, else do it on z-axis"
+
         //Assigning values for a max and min spawn area
-        spawnMax = objectPosition.x + 5.0f;
-        spawnMin = objectPosition.x - 5.0f;
+        spawnMaxX = objectPosition.x + 5.0f;
+        spawnMinX = objectPosition.x - 5.0f;
+        spawnMinZ = objectPosition.z - 5.0f;
+        spawnMaxZ = objectPosition.z + 5.0f;
 
         for (int i = 0; i < howManyTimes; i++)
         {
-            spawnPosition = new Vector3(Random.Range(spawnMin, spawnMax), objectPosition.y, Random.Range(spawnMin, spawnMax));
+            spawnPosition = new Vector3(Random.Range(spawnMinX, spawnMaxX), objectPosition.y, Random.Range(spawnMinZ, spawnMaxZ));
+            Debug.Log(spawnPosition.x);
+            Debug.Log(spawnPosition.y);
+            Debug.Log(spawnPosition.z);
 
             //Switch statement used to spawn the appropriate objects
             switch (timePeriod.GetTimePeriod())
