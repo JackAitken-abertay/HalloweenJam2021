@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     public float roadRotation = 0.0f;
     float rotateTimer = 0.0f;
 
+    public Vector2Int roadDirection = new Vector2Int(0, -1);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -65,9 +67,27 @@ public class Enemy : MonoBehaviour
             if (rotateTimer >= 5.0f)
             {
                 Debug.Log("Enemy Collided with curved road");
+                
+                if (roadDirection == new Vector2Int(1,0))
+                {
+                    roadRotation = -90.0f;
+                }
+                if (roadDirection == new Vector2Int(-1, 0))
+                {
+                    roadRotation = 90.0f;
+                }
+                if (roadDirection == new Vector2Int(0,-1))
+                {
+                    roadRotation = -180.0f;
+                }
+                if (roadDirection == new Vector2Int(0,1))
+                {
+                    roadRotation = 0.0f;
+                }
+
                 Quaternion q = transform.rotation;
-                Quaternion newQ = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
-                transform.rotation = newQ;
+                q = Quaternion.Euler(q.eulerAngles.x, roadRotation, q.eulerAngles.z);
+                transform.rotation = q;
                 rotateTimer = 0.0f;
             }
         }
