@@ -109,6 +109,11 @@ public class PlayerController : MonoBehaviour
         }
 
         rotationTimer += Time.deltaTime;
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            sceneChange.GameOver();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

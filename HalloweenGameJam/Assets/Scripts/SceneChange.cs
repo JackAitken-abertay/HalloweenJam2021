@@ -19,7 +19,7 @@ public class SceneChange : MonoBehaviour
 
     public void GameOver()
     {
-        SceneManager.LoadScene("Game Over");
+        SceneManager.LoadScene("GameOver");
     }
 
     public void StartGame()
