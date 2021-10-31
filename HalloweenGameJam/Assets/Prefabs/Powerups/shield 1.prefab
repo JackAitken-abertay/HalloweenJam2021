@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3284406299327095405}
   - component: {fileID: 1890198708641689032}
   - component: {fileID: 4458461359829260546}
+  - component: {fileID: -2500362487343463667}
   m_Layer: 0
   m_Name: shield 1
   m_TagString: Untagged
@@ -82,3 +83,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-2500362487343463667
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2801061449370319063}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.65604234, y: 0.41178894, z: 0.07236005}
+  m_Center: {x: -0.000000029802326, y: -0.00000011175871, z: -0.00000008754432}

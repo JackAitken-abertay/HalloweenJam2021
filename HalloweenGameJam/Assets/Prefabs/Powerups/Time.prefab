@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6443449827388448088}
   - component: {fileID: 7981611023239303933}
   - component: {fileID: 5269378303337539127}
+  - component: {fileID: 7002915857713370214}
   m_Layer: 0
-  m_Name: time
+  m_Name: Time
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,3 +83,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7002915857713370214
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5917848478091446242}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.082543574, y: 0.4728499, z: 0.47815028}
+  m_Center: {x: -0.0000000018626456, y: 0, z: 2.646978e-23}
